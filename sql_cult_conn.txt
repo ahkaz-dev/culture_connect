@@ -1,0 +1,57 @@
+cult_conn
+
+CREATE TABLE Users (
+    Id int NOT NULL AUTO_INCREMENT,
+    Login varchar(25) NOT NULL,
+    Password varchar(16) NOT NULL,
+    Email varchar(320),
+    
+    Admin int,
+    Editor int,
+
+    PRIMARY KEY (Id),
+    FOREIGN KEY (Admin) REFERENCES Admins(Admin),
+    FOREIGN KEY (Editor) REFERENCES Editors(Editor)
+);
+
+CREATE TABLE Admins(
+    Id int NOT NULL AUTO_INCREMENT,
+
+    PRIMARY KEY (Id)
+);
+
+CREATE TABLE Editors(
+    Id int NOT NULL AUTO_INCREMENT,
+
+    PRIMARY KEY (Id)
+);
+
+
+----------------------------------
+CREATE TABLE Museums (
+    Id int NOT NULL AUTO_INCREMENT,
+    Name varchar(55) NOT NULL,
+    Short_desc varchar(150) NOT NULL,
+    Full_desc varchar(320) NOT NULL,
+
+    PRIMARY KEY (Id),
+);
+CREATE TABLE Articles (
+    Id int NOT NULL AUTO_INCREMENT,
+    Name varchar(55) NOT NULL,
+    Short_desc varchar(150) NOT NULL,
+    Full_desc varchar(320) NOT NULL,
+    Date varchar(25) NOT NULL,
+
+    PRIMARY KEY (Id),
+);
+CREATE TABLE Product (
+    Id int NOT NULL AUTO_INCREMENT,
+    Name varchar(55) NOT NULL,
+    Short_desc varchar(150) NOT NULL,
+    Full_desc varchar(320) NOT NULL,
+    Price varchar(25) NOT NULL,
+    #Available boolean NOT NULL,
+
+    PRIMARY KEY (Id),
+);
