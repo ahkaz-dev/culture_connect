@@ -3,29 +3,33 @@ cult_conn
 CREATE TABLE Users (
     Id int NOT NULL AUTO_INCREMENT,
     Login varchar(25) NOT NULL,
-    Password varchar(16) NOT NULL,
+    Password varchar(255) NOT NULL,
     Email varchar(320),
-    
+
     Admin int,
     Editor int,
 
     PRIMARY KEY (Id),
-    FOREIGN KEY (Admin) REFERENCES Admins(Admin),
-    FOREIGN KEY (Editor) REFERENCES Editors(Editor)
+    INDEX (Admin),
+    INDEX (Editor),
+    FOREIGN KEY (Admin) REFERENCES Admins(Id),
+    FOREIGN KEY (Editor) REFERENCES Editors(Id)
 );
+INSERT INTO `users`(`Login`, `Password`, `Email`, `Admin`, `Editor`) VALUES ('Login','paasse2351','rma@gmail.com','1','1')
 
 CREATE TABLE Admins(
     Id int NOT NULL AUTO_INCREMENT,
 
     PRIMARY KEY (Id)
 );
+INSERT INTO `admins`(`Id`) VALUES ('1')
 
 CREATE TABLE Editors(
     Id int NOT NULL AUTO_INCREMENT,
 
     PRIMARY KEY (Id)
 );
-
+INSERT INTO `editors`(`Id`) VALUES ('1')
 
 ----------------------------------
 CREATE TABLE Museums (
@@ -34,7 +38,7 @@ CREATE TABLE Museums (
     Short_desc varchar(150) NOT NULL,
     Full_desc varchar(320) NOT NULL,
 
-    PRIMARY KEY (Id),
+    PRIMARY KEY (Id)
 );
 CREATE TABLE Articles (
     Id int NOT NULL AUTO_INCREMENT,
@@ -43,15 +47,30 @@ CREATE TABLE Articles (
     Full_desc varchar(320) NOT NULL,
     Date varchar(25) NOT NULL,
 
-    PRIMARY KEY (Id),
+    Editor int,
+
+    INDEX (Editor),
+    FOREIGN KEY (Editor) REFERENCES Users(Id),
+
+    PRIMARY KEY (Id)
+);
+CREATE TABLE News (
+    Id int NOT NULL AUTO_INCREMENT,
+    Name varchar(55) NOT NULL,
+    Short_desc varchar(150) NOT NULL,
+    Full_desc varchar(320) NOT NULL,
+    Footer_desc varchar(150) NOT NULL,
+    Date varchar(25) NOT NULL,
+
+    PRIMARY KEY (Id)
 );
 CREATE TABLE Product (
     Id int NOT NULL AUTO_INCREMENT,
     Name varchar(55) NOT NULL,
     Short_desc varchar(150) NOT NULL,
-    Full_desc varchar(320) NOT NULL,
-    Price varchar(25) NOT NULL,
-    #Available boolean NOT NULL,
+    Full_desc varchar(320),
+    Price varchar(25),
+    Available varchar(15),
 
-    PRIMARY KEY (Id),
+    PRIMARY KEY (Id)
 );
