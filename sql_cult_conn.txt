@@ -37,6 +37,7 @@ CREATE TABLE Museums (
     Name varchar(55) NOT NULL,
     Short_desc varchar(150) NOT NULL,
     Full_desc varchar(320) NOT NULL,
+    Image_path varchar(255),
 
     PRIMARY KEY (Id)
 );

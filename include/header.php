@@ -47,7 +47,7 @@ $lastItem_news = end($news_query_result);
             <?php else: ?>
                 <?php foreach ($articles_query_result as $row): ?>
                         <li><a class="dropdown-item" href="dynamic_pages/articles.php?id=<?= $row['Id'] ?>"><?= htmlspecialchars($row['Name']) ?></a></li>
-                        <?php if ($row !== $lastItem_articles): // Добавляем разделитель только если это НЕ последний элемент ?>
+                        <?php if ($row !== $lastItem_articles): ?>
                             <li><hr class="dropdown-divider"></li>
                         <?php endif; ?>
                 <?php endforeach; ?>
@@ -80,7 +80,7 @@ $lastItem_news = end($news_query_result);
                 <?php if (isset($_SESSION['log-session-data'])): ?>
                     <?php if ($_SESSION['log-session-data']["Admin"]): ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Админ-панель</a>
+                            <a class="nav-link" href="./admin/panel.php">Админ-панель</a>
                         </li>
                     <?php elseif ($_SESSION['log-session-data']["Editor"]): ?>
                         <li class="nav-item">
