@@ -90,7 +90,7 @@ $lastItem_news = end($news_query_result);
                 <?php endif; ?>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                    <img src="/cult_conn/static/svg/user-circle.svg" alt="Мой аккаунт" width="30" height="30">
+                    <img loading="lazy" src="/cult_conn/static/svg/user-circle.svg" alt="Мой аккаунт" width="30" height="30">
                 </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="#">Настройки</a></li>

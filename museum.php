@@ -21,7 +21,7 @@ $mesuems_query_result = $query_museums->fetchAll(PDO::FETCH_ASSOC);
                     <div class="col-md-6 col-lg-4 mb-4">
                         <div class="card h-100 shadow-sm rounded-3">
                             <div class="position-relative">
-                                <img src="cult_conn/uploads/<?= htmlspecialchars($row['Image_path']) ?>" class="image-preview img-fluid" alt="Музей">
+                                <img src="cult_conn/uploads/<?= htmlspecialchars($row['Image_path']) ?>" loading="lazy" class="image-preview img-fluid" alt="Музей">
                             </div>
                             <div class="card-body text-center">
                                 <h5 class="card-title fw-bold"><?= htmlspecialchars($row["Name"]) ?></h5>

@@ -52,7 +52,7 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
             <div class="col">
                 <div class="card h-100">
                     <div class="position-relative">
-                        <img src="./static/png/card-museum.png" class="card-img-top" alt="Музеи">
+                        <img src="./static/png/card-museum.png" loading="lazy" class="card-img-top" alt="Музеи">
                         <div class="card-img-overlay">Museums <br>Число записей [<?= (empty($mesuems_query_result)) ? "0" : $mesuems_query_result ?>] </div>
                     </div>
                     <div class="card-body">
@@ -66,7 +66,7 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
             <div class="col">
                 <div class="card h-100">
                     <div class="position-relative">
-                        <img src="./static/png/card-acrticle.png" class="card-img-top" alt="Статьи">
+                        <img src="./static/png/card-acrticle.png" loading="lazy" class="card-img-top" alt="Статьи">
                         <div class="card-img-overlay">Статьи <br>Число записей [<?= (empty($article_query_result)) ? "0" : $article_query_result ?>]</div>
                     </div>
                     <div class="card-body">
@@ -80,7 +80,7 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
             <div class="col">
                 <div class="card h-100">
                     <div class="position-relative">
-                        <img src="./static/png/card-news.png" class="card-img-top" alt="Новости">
+                        <img src="./static/png/card-news.png" loading="lazy" class="card-img-top" alt="Новости">
                         <div class="card-img-overlay">News <br>Число записей [<?= (empty($news_query_result)) ? "0" : $news_query_result ?>]</div>
                     </div>
                     <div class="card-body">
@@ -94,7 +94,7 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
             <div class="col">
                 <div class="card h-100">
                     <div class="position-relative">
-                        <img src="./static/png/card-users.png" class="card-img-top" alt="Пользователи">
+                        <img src="./static/png/card-users.png" loading="lazy" class="card-img-top" alt="Пользователи">
                         <div class="card-img-overlay">Пользователи <br>Число записей [<?= (empty($users_query_result)) ? "0" : $users_query_result ?>]</div>
                     </div>
                     <div class="card-body">
@@ -108,7 +108,7 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
             <div class="col">
                 <div class="card h-100">
                     <div class="position-relative">
-                        <img src="./static/png/card-product.png" class="card-img-top" alt="Товары">
+                        <img src="./static/png/card-product.png" loading="lazy" class="card-img-top" alt="Товары">
                         <div class="card-img-overlay">Товары <br>Число записей [<?= (empty($product_query_result)) ? "0" : $product_query_result ?>]</div>
                     </div>
                     <div class="card-body">

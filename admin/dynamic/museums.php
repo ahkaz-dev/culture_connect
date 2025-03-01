@@ -96,7 +96,7 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
             <div class="row">
                 <div class="form-container">
                     <div class="col-md-4 image-column">
-                        <img src="/cult_conn/uploads/<?= htmlspecialchars(basename($museum_query_result['Image_path'])) ?>" class="image-preview img-fluid" alt="Музей">
+                        <img loading="lazy" src="/cult_conn/uploads/<?= htmlspecialchars(basename($museum_query_result['Image_path'])) ?>" class="image-preview img-fluid" alt="Музей">
                         <div class="mb-3">
                             <label for="image" class="form-label">Изображение</label>
                             <input type="file" class="form-control" id="image" name="image" accept="image/*" onchange="validateImageSize(this)">
