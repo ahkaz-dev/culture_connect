@@ -37,30 +37,32 @@ $lastItem_news = end($news_query_result);
         <li class="nav-item">
             <a class="nav-link" href="./museum.php">Музеи</a>
         </li>
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Статьи
-            </a>
+        <div class="btn-group">
+            <a href="./article.php" class="nav-link">Статьи</a>
+            <button type="button" class="nav-link dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="visually-hidden">Toggle Dropdown</span>
+            </button>
             <ul class="dropdown-menu">
             <?php if(empty($articles_query_result)): ?>
-                <li><a class="dropdown-item disabled" href="#">Статьи отсутствуют</a></li>
+                <li><a class="dropdown-item disabled" href="#">Статей нет</a></li>
             <?php else: ?>
                 <?php foreach ($articles_query_result as $row): ?>
                         <li><a class="dropdown-item" href="dynamic_pages/articles.php?id=<?= $row['Id'] ?>"><?= htmlspecialchars($row['Name']) ?></a></li>
-                        <?php if ($row !== $lastItem_articles): ?>
+                        <?php if ($row !== $lastItem_articles): // Добавляем разделитель только если это НЕ последний элемент ?>
                             <li><hr class="dropdown-divider"></li>
                         <?php endif; ?>
                 <?php endforeach; ?>
             <?php endif; ?>
             </ul>
-        </li>
+        </div>
         <li class="nav-item">
             <a class="nav-link" href="./product.php">Товары</a>
         </li>
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Новости
-            </a>
+        <div class="btn-group">
+            <a href="./new.php" class="nav-link">Новости</a>
+            <button type="button" class="nav-link dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="visually-hidden">Toggle Dropdown</span>
+            </button>
             <ul class="dropdown-menu">
             <?php if(empty($news_query_result)): ?>
                 <li><a class="dropdown-item disabled" href="#">Новостей нет</a></li>
@@ -73,6 +75,7 @@ $lastItem_news = end($news_query_result);
                 <?php endforeach; ?>
             <?php endif; ?>
             </ul>
+        </div>
         </li>
         </ul>
         <div class="navbar-nav d-flex me-5" role="search">

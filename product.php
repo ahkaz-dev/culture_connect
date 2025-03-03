@@ -5,7 +5,14 @@ $query_museums->execute();
 $products_query_result = $query_museums->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <title>Culture Connect | Товары</title>
-
+<style>
+    .card img {
+        width: 100%;
+        height: 239px;
+        border-radius: 5px 5px 0 0;
+        object-fit: none;
+    }
+</style>
 <body class="bg-light">
     <div class="container py-5">
         <?php if ($products_query_result): ?>
@@ -13,6 +20,9 @@ $products_query_result = $query_museums->fetchAll(PDO::FETCH_ASSOC);
                 <?php foreach ($products_query_result as $row): ?>
                     <div class="col-md-6 col-lg-4 mb-4">
                         <div class="card h-100 shadow-sm rounded-3 d-flex flex-column">
+                            <div class="position-relative">
+                                    <img src="cult_conn/uploads/<?= htmlspecialchars($row['Image_path']) ?>" loading="lazy" class="image-preview img-fluid" alt="Музей">
+                            </div>
                             <div class="card-body text-center flex-grow-1">
                                 <h5 class="card-title fw-bold"><?= htmlspecialchars($row["Name"]) ?></h5>
                                 <p class="card-text text-muted"><?= htmlspecialchars($row['Short_desc']) ?></p>

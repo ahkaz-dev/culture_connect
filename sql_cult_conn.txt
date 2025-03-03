@@ -72,6 +72,7 @@ CREATE TABLE Product (
     Full_desc varchar(320),
     Price varchar(25),
     Available varchar(15),
+    Image_path varchar(255),
 
     PRIMARY KEY (Id)
 );

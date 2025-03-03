@@ -72,7 +72,7 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
                     <div class="card-body">
                         <h5 class="card-title">Статьи</h5>
                         <p class="card-text">Описание категории Статьи. Здесь вы можете найти интересные статьи на разные темы.</p>
-                        <a href="#" class="btn btn-primary">Подробнее</a>
+                        <a href="/cult_conn/admin/article.php" class="btn btn-primary">Подробнее</a>
                     </div>
                 </div>
             </div>
@@ -86,7 +86,7 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
                     <div class="card-body">
                         <h5 class="card-title">Новости</h5>
                         <p class="card-text">Описание категории Новости. Здесь вы можете найти последние новости.</p>
-                        <a href="#" class="btn btn-primary">Подробнее</a>
+                        <a href="/cult_conn/admin/new.php" class="btn btn-primary">Подробнее</a>
                     </div>
                 </div>
             </div>
@@ -100,7 +100,7 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
                     <div class="card-body">
                         <h5 class="card-title">Пользователи</h5>
                         <p class="card-text">Описание категории Пользователи. Здесь вы можете найти информацию о пользователях.</p>
-                        <a href="#" class="btn btn-primary">Подробнее</a>
+                        <a href="/cult_conn/admin/user.php" class="btn btn-primary">Подробнее</a>
                     </div>
                 </div>
             </div>
@@ -114,7 +114,7 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
                     <div class="card-body">
                         <h5 class="card-title">Товары</h5>
                         <p class="card-text">Описание категории Товары. Здесь вы можете найти информацию о различных товарах.</p>
-                        <a href="#" class="btn btn-primary">Подробнее</a>
+                        <a href="/cult_conn/admin/product.php" class="btn btn-primary">Подробнее</a>
                     </div>
                 </div>
             </div>

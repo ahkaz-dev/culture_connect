@@ -47,23 +47,31 @@ if (isset($_POST['register-button'])) {
 
 <title>Регистрация аккаунта</title>
 
-<div class="container mt-5">
-    <h2>Регистрация</h2>
-    <form action="regin.php" method="POST">
-        <div class="mb-3">
-            <label for="login" class="form-label">Логин</label>
-            <input type="text" class="form-control" id="login" name="login" required>
+<div class="d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card rounded-4 p-4" style="max-width: 400px; width: 100%;">
+        <div class="card-body">
+            <div class="container mt-5">
+                <h2>Регистрация</h2>
+                <form action="regin.php" method="POST">
+                    <div class="mb-3">
+                        <label for="login" class="form-label">Логин</label>
+                        <input type="text" class="form-control" id="login" name="login" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Пароль</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <button type="submit" name="register-button" class="btn btn-success w-100 btn-lg">Зарегистрироваться</button>
+                    <div class="text-center mt-3">
+                        <a href="login.php" class="btn btn-secondary w-100">Вход</a>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email" required>
-        </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">Пароль</label>
-            <input type="password" class="form-control" id="password" name="password" required>
-        </div>
-        <button type="submit" name="register-button" class="btn btn-primary">Зарегистрироваться</button>
-    </form>
+    </div>
 </div>
-
 <?php include "include/footer.php"; ?>
