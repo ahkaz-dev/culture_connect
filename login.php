@@ -18,8 +18,9 @@ if (isset($_POST['login-button'])) {
                 $_SESSION["log-session"] = true;
 
                 $_SESSION["log-mess-s"] = "Вы вошли в аккаунт";
-                header('Location: index.php'); 
-                exit();
+                echo '<script type="text/javascript">';
+                echo 'window.location.href = "http://localhost/cult_conn/";';
+                echo '</script>';
             } else {
                 $_SESSION['log-mess-e'] = "Ошибка ввода";
             }
@@ -29,8 +30,9 @@ if (isset($_POST['login-button'])) {
     } else {
         $_SESSION['log-mess-e'] = "Заполните все поля";
     }
-    header('Location: login.php');
-    exit();
+    echo '<script type="text/javascript">';
+    echo 'window.location.href = "http://localhost/cult_conn/login.php";';
+    echo '</script>';
 }
 
 
