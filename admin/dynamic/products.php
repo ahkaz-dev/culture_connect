@@ -4,7 +4,7 @@
 <?php 
 
 $Id = (isset($_GET['id'])) ? $_GET['id'] : 0;
-$query = $pdo->prepare("SELECT * FROM product WHERE Id=:Id");
+$query = $pdo->prepare("SELECT product.*, users.login AS EditorLogin FROM product JOIN users ON product.Editor = users.Id WHERE product.Id=:Id;");
 $query->execute(['Id' => $Id]);
 $product_query_result = $query->fetch(PDO::FETCH_ASSOC);
 
@@ -13,9 +13,12 @@ $product_query_result = $query->fetch(PDO::FETCH_ASSOC);
 if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])): 
     if ($_SESSION['log-session-data']["Admin"]):
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
-            $stmt = $pdo->prepare("DELETE FROM product WHERE Id = :Id");
-            $stmt->bindParam(':Id', $Id, PDO::PARAM_INT);
-    
+            $image_path = $product_query_result["Image_path"];
+            if (unlink($image_path)) {
+                $stmt = $pdo->prepare("DELETE FROM product WHERE Id = :Id");
+                $stmt->bindParam(':Id', $Id, PDO::PARAM_INT);
+            } 
+
             if ($stmt->execute()) {
                 $_SESSION["log-mess-warn"] = "Запись удалена";
                 echo '<script type="text/javascript">';
@@ -46,7 +49,7 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
             } 
         
             $stmt = $pdo->prepare("UPDATE product SET Name = ?, Short_desc = ?, Full_desc = ?, Price = ?, Available = ? WHERE Id = ?");
-            if ($stmt->execute([$name, $short_desc, $full_desc, $price, $available, $id])) {
+            if ($stmt->execute([$name, $short_desc, $full_desc, $price, $available,  $id])) {
                 $_SESSION["log-mess-s"] = "Запись обновлена";
                 echo "<script>location.href = 'https://localhost/cult_conn/admin/product.php';</script>";
             } else {
@@ -59,12 +62,13 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
             $full_desc = $_POST['full_desc'];
             $price = $_POST['price'];
             $available = $_POST['available'] == 1 ? 'Yes' : 'No';
+            $editor = $_SESSION['log-session-data']['Id'];
 
             if (isset($_FILES['image'])) {
             $image_path = '../../uploads/products/' . basename($_FILES['image']['name']);
                 if (move_uploaded_file($_FILES['image']['tmp_name'], $image_path)) {
-                    $stmt = $pdo->prepare("INSERT INTO product SET Name = ?, Short_desc = ?, Full_desc = ?, Price = ?, Available = ?, Image_path = ?");
-                    if ($stmt->execute([$name, $short_desc, $full_desc, $price, $available, $image_path])) {
+                    $stmt = $pdo->prepare("INSERT INTO product SET Name = ?, Short_desc = ?, Full_desc = ?, Price = ?, Available = ?, Image_path = ?, Editor = ?");
+                    if ($stmt->execute([$name, $short_desc, $full_desc, $price, $available, $image_path, $editor])) {
                         $_SESSION["log-mess-s"] = "Запись сохранена";
                         echo "<script>location.href = 'https://localhost/cult_conn/admin/product.php';</script>";
                     } else {
@@ -90,9 +94,9 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
         margin-right: 20px;
     }
 </style>
-<title>Товар: <?= $product_query_result["Name"] ?></title>
 <div class="container mt-5">
         <?php if ($product_query_result): ?>
+            <title>Товар: <?= $product_query_result["Name"] ?></title>
             <form method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="form-container">
@@ -132,6 +136,10 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
                                     <option value="2" <?php echo ($product_query_result["Available"]) == 'No' ? 'selected':''; ?>>Отсутсвует</option>
                                 </select>
                             </div>
+                            <div class="mb-3">
+                                <label for="editor" class="form-label">Товар добавил</label>
+                                <input type=text class="form-control" id="editor" disabled name="editor" maxlength="55" required value=<?= htmlspecialchars($product_query_result["EditorLogin"]) ?>>
+                            </div>
                             <button type="submit" class="btn btn-primary" name="update">Сохранить</button>
                             <form method="post">
                                 <button class="btn btn-danger" name="delete">Удалить</button>
@@ -141,6 +149,7 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
                 </div>
             </div>
         <?php elseif($product_query_result == 0): ?>
+            <title>Создать новый товар</title>
             <form method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="form-container">
@@ -177,16 +186,25 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
                                     <option value="2">Отсутсвует</option>
                                 </select>
                             </div>
+                            <div class="mb-3">
+                                <label for="editor" class="form-label">Кто добавил</label>
+                                <input type=text class="form-control" id="editor" disabled name="editor" maxlength="55" required value=<?= $_SESSION['log-session-data']['Login'] ?>>
+                            </div>
                             <button type="submit" class="btn btn-primary" name="save">Сохранить</button>
                             <button class="btn btn-second" type="reset">Очистить</button>
                         </form>
                     </div>
                 </div>
             </div>
-            <?php endif; ?>
-        <?php else: ?>
-            <p class="text-muted">Данного музея не существует :(</p>
+            <?php else: ?>
+            <p class="text-muted">Данного товара не существует :(</p>
         <?php endif; ?>
+    <?php else: ?>
+            <div class="container mt-5">
+                <?php include "./../../error/404.php"; ?> 
+            </div>
+    <?php endif; ?>
+</div>
 </div>
 <script>
     function validateImageSize(input) {

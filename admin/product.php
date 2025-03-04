@@ -5,7 +5,7 @@
 <?php 
 if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])): 
     if ($_SESSION['log-session-data']["Admin"]):
-        $query = $pdo->prepare("SELECT * FROM product");
+        $query = $pdo->prepare("SELECT product.*, users.login as EditorLogin FROM product JOIN users ON product.editor = users.id ORDER BY product.id;");
         $query->execute();
         $products_query_result = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -25,6 +25,7 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
                     <th>Полное описание</th>
                     <th>Цена</th>
                     <th>В наличии</th>
+                    <th>Кто добавил товар</th>
                     <th>Действие</th>
                 </tr>
             </thead>
@@ -39,7 +40,10 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
                             <td><?= htmlspecialchars($product["Short_desc"]) ?></td>
                             <td><?= htmlspecialchars($product["Full_desc"]) ?></td>
                             <td><?= htmlspecialchars($product["Price"]) ?></td>
-                            <td><?= htmlspecialchars($product["Available"]) ?></td>
+
+                            <td><?php echo htmlspecialchars($product["Available"]) == 'Yes' ? 'В наличии' : 'Отсутствует'; ?></td>
+
+                            <td><?= htmlspecialchars($product["EditorLogin"]) ?></td>
 
                             <td><a href="/cult_conn/admin/dynamic/products.php?id=<?= htmlspecialchars($product["Id"])?>">Редактировать</a></td>
                         </tr>

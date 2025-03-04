@@ -4,19 +4,21 @@
 <?php 
 
 $Id = (isset($_GET['id'])) ? $_GET['id'] : 0;
-$query = $pdo->prepare("SELECT * FROM museums WHERE Id=:Id");
+$query = $pdo->prepare("SELECT museums.*, users.login AS EditorLogin FROM museums JOIN users ON museums.Editor = users.Id WHERE museums.Id=:Id;");
 $query->execute(['Id' => $Id]);
 $museum_query_result = $query->fetch(PDO::FETCH_ASSOC);
-
 
 ?>    
 <?php 
 if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])): 
     if ($_SESSION['log-session-data']["Admin"]):
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
-            $stmt = $pdo->prepare("DELETE FROM museums WHERE Id = :Id");
-            $stmt->bindParam(':Id', $Id, PDO::PARAM_INT);
-    
+            $image_path = $museum_query_result["Image_path"];
+            if (unlink($image_path)) {
+                $stmt = $pdo->prepare("DELETE FROM museums WHERE Id = :Id");
+                $stmt->bindParam(':Id', $Id, PDO::PARAM_INT);
+            } 
+
             if ($stmt->execute()) {
                 $_SESSION["log-mess-warn"] = "Запись удалена";
                 echo '<script type="text/javascript">';
@@ -56,12 +58,13 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
             $name = $_POST['name'];
             $short_desc = $_POST['short_desc'];
             $full_desc = $_POST['full_desc'];
+            $editor = $_SESSION['log-session-data']['Id'];
         
             if (isset($_FILES['image'])) {
                 $image_path = '../../uploads/museums/' . basename($_FILES['image']['name']);
                     if (move_uploaded_file($_FILES['image']['tmp_name'], $image_path)) {
-                        $stmt = $pdo->prepare("INSERT INTO Museums SET Name = ?, Short_desc = ?, Full_desc = ?, Image_path = ? ");
-                        if ($stmt->execute([$name, $short_desc, $full_desc, $image_path])) {
+                        $stmt = $pdo->prepare("INSERT INTO Museums SET Name = ?, Short_desc = ?, Full_desc = ?, Image_path = ?, Editor = ? ");
+                        if ($stmt->execute([$name, $short_desc, $full_desc, $image_path, $editor])) {
                             $_SESSION["log-mess-s"] = "Запись добавлена";
                             echo "<script>location.href = 'https://localhost/cult_conn/admin/museum.php';</script>";
                         } else {
@@ -89,9 +92,9 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
         margin-right: 20px;
     }
 </style>
-<title>Музей: <?= $museum_query_result["Name"] ?></title>
 <div class="container mt-5">
         <?php if ($museum_query_result): ?>
+            <title>Музей: <?= $museum_query_result["Name"] ?></title>
             <form method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="form-container">
@@ -119,6 +122,10 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
                                 <label for="full_desc" class="form-label">Полное описание</label>
                                 <textarea class="form-control" id="full_desc" name="full_desc" maxlength="320" required><?= htmlspecialchars($museum_query_result["Full_desc"]) ?></textarea>
                             </div>
+                            <div class="mb-3">
+                                <label for="editor" class="form-label">Автор записи</label>
+                                <input type=text class="form-control" id="editor" disabled name="editor" maxlength="55" required value=<?= htmlspecialchars($museum_query_result["EditorLogin"]) ?>>
+                            </div>
                             <button type="submit" class="btn btn-primary" name="update">Сохранить</button>
                             <form method="post">
                                 <button class="btn btn-danger" name="delete">Удалить</button>
@@ -128,6 +135,7 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
                 </div>
             </div>
         <?php elseif($museum_query_result == 0): ?>
+            <title>Создать новый музей</title>
             <form method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="form-container">
@@ -151,17 +159,33 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
                                 <label for="full_desc" class="form-label">Полное описание</label>
                                 <textarea class="form-control" id="full_desc" name="full_desc" maxlength="320" required></textarea>
                             </div>
+                            <div class="mb-3">
+                                <label for="editor" class="form-label">Автор статьи</label>
+                                <input type=text class="form-control" id="editor" disabled name="editor" maxlength="55" required value=<?= $_SESSION['log-session-data']['Login'] ?>>
+                            </div>
                             <button type="submit" class="btn btn-primary" name="save">Сохранить</button>
                             <button class="btn btn-second" type="reset">Очистить</button>
                         </form>
                     </div>
                 </div>
             </div>
-            <?php endif; ?>
-        <?php else: ?>
+            <?php else: ?>
             <p class="text-muted">Данного музея не существует :(</p>
         <?php endif; ?>
+    <?php else: ?>
+            <div class="container mt-5">
+                <?php include "./../../error/404.php"; ?> 
+            </div>
+    <?php endif; ?>
 </div>
+
+<?php else: ?>
+        <div class="container mt-5">
+                <?php include "./../../error/404.php"; ?> 
+        </div>
+    <?php
+    endif; ?>
+
 <script>
     function validateImageSize(input) {
         const file = input.files[0];
@@ -173,11 +197,5 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
             }
         }
     }
-</script>
-<?php else: ?>
-        <div class="container mt-5">
-                <?php include "./../../error/404.php"; ?> 
-        </div>
-    <?php
-    endif; ?>
+</script>    
 <?php include "../../include/footer.php"; ?>

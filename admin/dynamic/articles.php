@@ -24,7 +24,7 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
             } 
         }
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
-            $id = $new_query_result["Id"];
+            $id = $article_query_result["Id"];
             $name = $_POST['name'];
             $short_desc = $_POST['short_desc'];
             $full_desc = $_POST['full_desc'];
@@ -53,9 +53,9 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
             }
         }
 ?>
-<title>Статья: <?= $article_query_result["Name"] ?></title>
 <div class="container mt-5">
         <?php if ($article_query_result): ?>
+            <title>Статья: <?= $article_query_result["Name"] ?></title>
             <form method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="form-container">
@@ -84,7 +84,7 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
                             </div>
                             <div class="mb-3">
                                 <label for="editor" class="form-label">Автор статьи</label>
-                                <input type=text class="form-control" id="editor" disabled name="editor" maxlength="55" required value=<?= htmlspecialchars($article_query_result["login"]) ?>>
+                                <input type=text class="form-control" id="editor" disabled name="editor" maxlength="55" required value=<?= htmlspecialchars($article_query_result["EditorLogin"]) ?>>
                             </div>
                             <button type="submit" class="btn btn-primary" name="update">Сохранить</button>
                             <form method="post">
@@ -95,6 +95,7 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
                 </div>
             </div>
         <?php elseif($article_query_result == 0): ?>
+            <title>Создать новую статью</title>
             <form method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="form-container">
@@ -127,10 +128,14 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
                     </div>
                 </div>
             </div>
-            <?php endif; ?>
         <?php else: ?>
             <p class="text-muted">Данной статьи не существует :(</p>
         <?php endif; ?>
+    <?php else: ?>
+            <div class="container mt-5">
+                <?php include "./../../error/404.php"; ?> 
+            </div>
+    <?php endif; ?>
 </div>
 <?php else: ?>
         <div class="container mt-5">

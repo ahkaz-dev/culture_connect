@@ -5,7 +5,7 @@
 <?php 
 if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])): 
     if ($_SESSION['log-session-data']["Admin"]):
-        $query = $pdo->prepare("SELECT *, users.login FROM articles JOIN users ON articles.editor = users.id;");
+        $query = $pdo->prepare("SELECT articles.*, users.login FROM articles JOIN users ON articles.editor = users.id ORDER BY articles.id");
         $query->execute();
         $articles_query_result = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>

@@ -5,7 +5,7 @@
 <?php 
 if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])): 
     if ($_SESSION['log-session-data']["Admin"]):
-        $query = $pdo->prepare("SELECT * FROM news");
+        $query = $pdo->prepare("SELECT news.*, users.login as EditorLogin FROM news JOIN users ON news.editor = users.id ORDER BY news.id;");
         $query->execute();
         $new_query_result = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -25,12 +25,12 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
                     <th>Полное описание</th>
                     <th>Конец новости</th>
                     <th>Дата статьи</th>
+                    <th>Автор новости</th>
                     <th>Действие</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (empty($new_query_result)): ?>
-                    echo "<tr>";
                 <?php else: ?>
                     <?php foreach ($new_query_result as $new) { ?>
                         <tr>
@@ -40,6 +40,7 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
                             <td><?= htmlspecialchars($new["Full_desc"]) ?></td>
                             <td><?= htmlspecialchars($new["Footer_desc"]) ?></td>
                             <td><?= htmlspecialchars($new["Date"]) ?></td>
+                            <td><?= htmlspecialchars($new["EditorLogin"]) ?></td>
 
                             <td><a href="/cult_conn/admin/dynamic/news.php?id=<?= htmlspecialchars($new["Id"])?>">Редактировать</a></td>
                         </tr>

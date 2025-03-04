@@ -5,7 +5,7 @@
 <?php 
 if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])): 
     if ($_SESSION['log-session-data']["Admin"]):
-        $query = $pdo->prepare("SELECT * FROM museums");
+        $query = $pdo->prepare("SELECT museums.*, users.login FROM museums JOIN users ON museums.editor = users.id ORDER BY museums.id;");
         $query->execute();
         $mesuems_query_result = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -23,6 +23,7 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
                     <th>Название</th>
                     <th>Краткое описание</th>
                     <th>Полное описание</th>
+                    <th>Запись создал</th>
                     <th>Действие</th>
                 </tr>
             </thead>
@@ -32,10 +33,12 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
                 <?php else: ?>
                     <?php foreach ($mesuems_query_result as $museum) { ?>
                         <tr>
+                            
                             <th scope="row"><?= htmlspecialchars($museum["Id"]) ?></th>
                             <td><?= htmlspecialchars($museum["Name"]) ?></td>
                             <td><?= htmlspecialchars($museum["Short_desc"]) ?></td>
                             <td><?= htmlspecialchars($museum["Full_desc"]) ?></td>
+                            <td><?= htmlspecialchars($museum["login"]) ?></td>
                             <td><a href="/cult_conn/admin/dynamic/museums.php?id=<?= htmlspecialchars($museum["Id"])?>">Редактировать</a></td>
                         </tr>
                     <?php }

@@ -28,9 +28,14 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
             $login = $_POST['login'];
             $password = password_hash($_POST['password'], PASSWORD_DEFAULT); 
             $email = $_POST['email'];
-            $admin = $_POST['admin'] ?  1: null;
-            $editor = $_POST['editor'] ?  1: null;
 
+            if ($user_query_result["Id"] == $_SESSION['log-session-data']['Id']):
+                $admin = $user_query_result["Admin"];
+                $editor = $user_query_result["Editor"];
+            else:
+                $admin = $_POST['admin'] ?  1: null;
+                $editor = $_POST['editor'] ?  1: null;
+            endif;
         
             $stmt = $pdo->prepare("UPDATE users SET Login = ?, Password = ?, Email = ?, Admin = ?, Editor = ? WHERE Id = ?");
             if ($stmt->execute([$login, $password, $email, $admin, $editor, $id])) {
@@ -54,9 +59,9 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
             }
         }
 ?>
-<title>Пользователь: <?= $user_query_result["Name"] ?></title>
 <div class="container mt-5">
         <?php if ($user_query_result): ?>
+            <title>Пользователь: <?= $user_query_result["Login"] ?></title>
             <form method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="form-container">
@@ -65,21 +70,39 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
                                 <label for="id" class="form-label">ID</label>
                                 <input type="text" class="form-control" id="id" disabled name="id" value="<?= htmlspecialchars($user_query_result["Id"]) ?>" readonly>
                             </div>
-                            <div class="mb-3">
-                                <label for="id" class="form-label">Роль доступа</label>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="admin" id="admin" name="admin" <?php echo ($user_query_result["Admin"]) ? 'checked' : ''; ?> >
-                                    <label class="form-check-label" for="admin">
-                                        Админ
-                                    </label>
+                            <?php if ($user_query_result["Id"] == $_SESSION['log-session-data']['Id']): ?>
+                                <div class="mb-3" style="pointer-events: none;opacity: 0.6;">
+                                    <label for="id" class="form-label">Роль доступа</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="admin" name="admin" <?php echo ($user_query_result["Admin"]) ? 'checked' : ''; ?> >
+                                        <label class="form-check-label" for="admin">
+                                            Админ
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="editor" <?php echo ($user_query_result["Editor"]) ? 'checked' : ''; ?> name="editor">
+                                        <label class="form-check-label" for="admin">
+                                            Редактор
+                                        </label>
+                                    </div>
                                 </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="editor" id="editor" <?php echo ($user_query_result["Editor"]) ? 'checked' : ''; ?> name="editor">
-                                    <label class="form-check-label" for="admin">
-                                        Редактор
-                                    </label>
+                            <?php else: ?>
+                                <div class="mb-3">
+                                    <label for="id" class="form-label">Роль доступа</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="admin" id="admin" name="admin" <?php echo ($user_query_result["Admin"]) ? 'checked' : ''; ?> >
+                                        <label class="form-check-label" for="admin">
+                                            Админ
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="editor" id="editor" <?php echo ($user_query_result["Editor"]) ? 'checked' : ''; ?> name="editor">
+                                        <label class="form-check-label" for="admin">
+                                            Редактор
+                                        </label>
+                                    </div>
                                 </div>
-                            </div>
+                            <?php endif; ?>
                             <div class="mb-3">
                                 <label for="login" class="form-label">Логин пользователя</label>
                                 <input type="text" class="form-control" id="login" name="login" value="<?= htmlspecialchars($user_query_result["Login"]) ?>" maxlength="25" required>
@@ -97,14 +120,17 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
                                 <input type="email" class="form-control" name="email" id="email" maxlength="320" required value="<?= htmlspecialchars($user_query_result["Email"]) ?>">
                             </div>
                             <button type="submit" class="btn btn-primary" name="update">Сохранить</button>
-                            <form method="post">
-                                <button class="btn btn-danger" name="delete">Удалить</button>
-                            </form>
+                            <?php if (!($user_query_result["Id"] == $_SESSION['log-session-data']['Id'])): ?>
+                                <form method="post">
+                                    <button class="btn btn-danger" name="delete">Удалить</button>
+                                </form>
+                            <?php endif; ?>
                         </form>
                     </div>
                 </div>
             </div>
         <?php elseif($user_query_result == 0): ?>
+            <title>Создать нового пользователя</title>
             <form method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="form-container">
@@ -137,10 +163,15 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
                     </div>
                 </div>
             </div>
-            <?php endif; ?>
-        <?php else: ?>
-            <p class="text-muted">Данной статьи не существует :(</p>
+            <?php else: ?>
+            <p class="text-muted">Данного юзера не существует :(</p>
         <?php endif; ?>
+    <?php else: ?>
+            <div class="container mt-5">
+                <?php include "./../../error/404.php"; ?> 
+            </div>
+    <?php endif; ?>
+</div>
 </div>
 <?php else: ?>
         <div class="container mt-5">

@@ -39,6 +39,11 @@ CREATE TABLE Museums (
     Full_desc varchar(320) NOT NULL,
     Image_path varchar(255),
 
+    Editor int,
+
+    INDEX (Editor),
+    FOREIGN KEY (Editor) REFERENCES Users(Id),
+
     PRIMARY KEY (Id)
 );
 CREATE TABLE Articles (
@@ -63,6 +68,11 @@ CREATE TABLE News (
     Footer_desc varchar(150) NOT NULL,
     Date varchar(25) NOT NULL,
 
+    Editor int,
+
+    INDEX (Editor),
+    FOREIGN KEY (Editor) REFERENCES Users(Id),
+
     PRIMARY KEY (Id)
 );
 CREATE TABLE Product (
@@ -73,6 +83,11 @@ CREATE TABLE Product (
     Price varchar(25),
     Available varchar(15),
     Image_path varchar(255),
+
+    Editor int,
+
+    INDEX (Editor),
+    FOREIGN KEY (Editor) REFERENCES Users(Id),
 
     PRIMARY KEY (Id)
 );

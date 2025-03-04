@@ -30,8 +30,9 @@ if (isset($_POST['register-button'])) {
                 $user = $stmt->fetch(PDO::FETCH_ASSOC);
                 $_SESSION['log-session-data'] = $user;
 
-                header('Location: index.php');
-                exit();
+                echo '<script type="text/javascript">';
+                echo 'window.location.href = "http://localhost/cult_conn/";';
+                echo '</script>';
             } else {
                 $_SESSION['log-mess-e'] = "Ошибка регистрации, попробуйте позже.";
             }
@@ -40,8 +41,9 @@ if (isset($_POST['register-button'])) {
         $_SESSION['log-mess-e'] = "Заполните все поля!";
     }
 
-    header('Location: regin.php');
-    exit();
+    echo '<script type="text/javascript">';
+    echo 'window.location.href = "http://localhost/cult_conn/regin.php";';
+    echo '</script>';
 }
 ?>
 

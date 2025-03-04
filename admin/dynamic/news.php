@@ -4,7 +4,7 @@
 <?php 
 
 $Id = (isset($_GET['id'])) ? $_GET['id'] : 0;
-$query = $pdo->prepare("SELECT * FROM news WHERE Id =:Id");
+$query = $pdo->prepare("SELECT news.*, users.login AS EditorLogin FROM news JOIN users ON news.Editor = users.Id WHERE news.Id=:Id;");
 $query->execute(['Id' => $Id]);
 $new_query_result = $query->fetch(PDO::FETCH_ASSOC);
 
@@ -44,9 +44,10 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
             $full_desc = $_POST['full_desc'];
             $footer_desc = $_POST['footer_desc'];
             $date = date("Y-m-d");
+            $editor = $_SESSION['log-session-data']['Id'];
         
-            $stmt = $pdo->prepare("INSERT INTO news SET Name = ?, Short_desc = ?, Full_desc = ?, Footer_desc = ?, Date = ?");
-            if ($stmt->execute([$name, $short_desc, $full_desc, $footer_desc, $date])) {
+            $stmt = $pdo->prepare("INSERT INTO news SET Name = ?, Short_desc = ?, Full_desc = ?, Footer_desc = ?, Date = ?, Editor = ?");
+            if ($stmt->execute([$name, $short_desc, $full_desc, $footer_desc, $date, $editor])) {
                 $_SESSION["log-mess-s"] = "Запись сохранена";
                 echo "<script>location.href = 'https://localhost/cult_conn/admin/new.php';</script>";
             } else {
@@ -54,9 +55,9 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
             }
         }
 ?>
-<title>Статья: <?= $new_query_result["Name"] ?></title>
 <div class="container mt-5">
         <?php if ($new_query_result): ?>
+            <title>Новость: <?= $new_query_result["Name"] ?></title>
             <form method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="form-container">
@@ -87,6 +88,10 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
                                     <input id="date" name="date" class="form-control" type="date" disabled required value="<?= htmlspecialchars($new_query_result["Date"]) ?>"/>
                                 </div>
                             </div>
+                            <div class="mb-3">
+                                <label for="editor" class="form-label">Автор новости</label>
+                                <input type=text class="form-control" id="editor" disabled name="editor" maxlength="55" required value=<?= htmlspecialchars($new_query_result["EditorLogin"]) ?>>
+                            </div>
                             <button type="submit" class="btn btn-primary" name="update">Сохранить</button>
                             <form method="post">
                                 <button class="btn btn-danger" name="delete">Удалить</button>
@@ -96,6 +101,7 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
                 </div>
             </div>
         <?php elseif($new_query_result == 0): ?>
+            <title>Создать новую новость</title>
             <form method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="form-container">
@@ -122,16 +128,25 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
                                     <input id="date" class="form-control" type="date" disabled required format="yyyy-mm-dd" value="<?= date("Y-m-d") ?>"/>
                                 </div>
                             </div>
+                            <div class="mb-3">
+                                <label for="editor" class="form-label">Автор статьи</label>
+                                <input type=text class="form-control" id="editor" disabled name="editor" maxlength="55" required value=<?= $_SESSION['log-session-data']['Login'] ?>>
+                            </div>
                             <button type="submit" class="btn btn-primary" name="save">Сохранить</button>
                             <button class="btn btn-second" type="reset">Очистить</button>
                         </form>
                     </div>
                 </div>
             </div>
-            <?php endif; ?>
-        <?php else: ?>
-            <p class="text-muted">Данной статьи не существует :(</p>
+            <?php else: ?>
+            <p class="text-muted">Данной новости не существует :(</p>
         <?php endif; ?>
+    <?php else: ?>
+            <div class="container mt-5">
+                <?php include "./../../error/404.php"; ?> 
+            </div>
+    <?php endif; ?>
+</div>
 </div>
 <?php else: ?>
         <div class="container mt-5">
