@@ -12,6 +12,7 @@ $mesuems_query_result = $query_museums->fetchAll(PDO::FETCH_ASSOC);
         border-radius: 5px 5px 0 0;
         object-fit: none;
     }
+
 </style>
 <body class="bg-light">
     <div class="container py-5">

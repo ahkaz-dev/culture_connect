@@ -16,6 +16,7 @@ $articles_query_result = $query_museums->fetchAll(PDO::FETCH_ASSOC);
                             <div class="card-body text-center">
                                 <h5 class="card-title fw-bold"><?= htmlspecialchars($row["Name"]) ?></h5>
                                 <p class="card-text text-muted"><?= htmlspecialchars($row['Short_desc']) ?></p>
+                                <a class="btn btn-primary" href="/cult_conn/dynamic_pages/articles.php?id=<?= htmlspecialchars($row["Id"])?>">Узнать подробнее</a>
                             </div>
                         </div>
                     </div>

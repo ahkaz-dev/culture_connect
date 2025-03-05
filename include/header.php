@@ -7,11 +7,16 @@ $query_artl->execute();
 $articles_query_result = $query_artl->fetchAll(PDO::FETCH_ASSOC);
 $lastItem_articles = end($articles_query_result);
 
-
 $query_news = $pdo->prepare("SELECT Name, Id FROM news");
 $query_news->execute();
 $news_query_result = $query_news->fetchAll(PDO::FETCH_ASSOC);
 $lastItem_news = end($news_query_result);
+
+if (isset($_SESSION['log-session-data']['Id'])) {
+    $query_user = $pdo->prepare("SELECT * FROM users WHERE Id = ?");
+    $query_user->execute([$_SESSION['log-session-data']['Id']]);
+    $user_query_result = $query_user->fetch();
+}
 
 ?>
 <!DOCTYPE html>
@@ -45,7 +50,53 @@ $lastItem_news = end($news_query_result);
         font-weight: 500;
         font-style: normal;
     }
+    .container.py-5 {
+        background-color: #efefef8f;
+        width: 100%;
+        height: 100%;
+    }
 
+
+    @media (max-width: 1200px) {
+        footer {
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+        html {
+        position: relative;
+    }
+        body {
+        }
+    }
+
+    @media (min-width: 1201px) and (max-width: 1634px) {
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+        html {
+        position: relative;
+    }
+        body {
+        }
+    }
+
+    @media (min-width: 1635px) {
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+        html {
+        position: relative;
+        min-height: 100%;
+    }
+        body {
+            margin-bottom: 120px;
+        }
+    }
     </style>
     <base href="/cult_conn/">
 </head>
@@ -120,10 +171,14 @@ $lastItem_news = end($news_query_result);
                 <?php endif; ?>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                    <img loading="lazy" src="/cult_conn/static/svg/user-circle.svg" alt="Мой аккаунт" width="30" height="30">
+                    <?php if (isset($user_query_result['Image_path'])): ?>
+                        <img loading="lazy" src="/cult_conn/uploads/users/<?= htmlspecialchars(basename($user_query_result['Image_path'])) ?>" alt="Мой аккаунт" width="30" height="30">
+                    <?php else: ?>
+                        <img loading="lazy" src="/cult_conn/static/svg/user-circle.svg" alt="Мой аккаунт" width="30" height="30">
+                    <?php endif; ?>
                 </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Настройки</a></li>
+                            <li><a class="dropdown-item" href="/cult_conn/account/">Настройки</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="include/logout.php">Выход</a></li>
                     </ul>
@@ -141,5 +196,5 @@ $lastItem_news = end($news_query_result);
   </div>
 </nav>
 </header>
-<body>
+<body class="d-flex flex-column min-vh-100">
     

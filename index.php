@@ -3,13 +3,13 @@
 
 <title>Culture Connect | Главная</title>
 <style>
-        body, html {
-            height: 100%;
+
+        
+        @media (max-width: 1201px) {
+            body, html {
             margin: 0;
             padding: 0;
         }
-        
-        @media (max-width: 1201px) {
             .hero-section {
                 background: url('static/png/main-back.png') no-repeat center center;
                 display: flex;
@@ -28,6 +28,10 @@
         }
 
         @media (min-width: 1201px) and (max-width: 1634px) {
+            body, html {
+            margin: 0;
+            padding: 0;
+        }
                 .hero-section {
                 background: url('static/png/main-back.png') no-repeat center center;
                 background-size: cover;
@@ -39,6 +43,11 @@
         }
 
         @media (min-width: 1635px) {
+            body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
             .hero-section {
                 background: url('static/png/main-back.png') no-repeat center center;
                 background-size: cover;
@@ -86,7 +95,9 @@
     <div class="hero-content">
         <h1 class="mooli-regular">Culture Connect</h1>
         <h3 class="comfortaa-regular">Слоган компании</h3>
-        <p class="comfortaa-regular">Для современного мира понимание сути ресурсосберегающих технологий играет определяющее значение для новых принципов формирования материально-технической и кадровой базы.</p>
+        <p class="comfortaa-regular">
+        Мы специализируемся на создании погружающих опытов и образовательных ресурсов, которые празднуют разнообразие и способствуют культурному обмену.
+        </p>
         <a href="#" class="btn btn-brown">Узнать больше</a>
     </div>
 </div>

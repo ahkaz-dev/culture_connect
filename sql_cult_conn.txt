@@ -5,6 +5,7 @@ CREATE TABLE Users (
     Login varchar(25) NOT NULL,
     Password varchar(255) NOT NULL,
     Email varchar(320),
+    Image_path varchar(255),
 
     Admin int,
     Editor int,

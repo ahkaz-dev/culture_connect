@@ -30,7 +30,6 @@ if (isset($_SESSION["log-session"]) && isset($_SESSION['log-session-data'])):
             </thead>
             <tbody>
                 <?php if (empty($articles_query_result)): ?>
-                    echo "<tr>";
                 <?php else: ?>
                     <?php foreach ($articles_query_result as $article) { ?>
                         <tr>
